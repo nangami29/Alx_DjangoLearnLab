@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Member Dashboard</title>
+</head>
+<body>
+    <h2>Welcome, Member {{ request.user.username }}</h2>
+    <p>This section is for Member users only.</p>
+    <a href="{% url 'logout' %}">Logout</a>
+</body>
+</html>

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Profile</h2>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ user_form.as_p }}
+    {{ profile_form.as_p }}
+    <button type="submit">Update Profile</button>
+</form>
+
+<hr>
+<h3>Preview</h3>
+<p><strong>Username:</strong> {{ user.username }}</p>
+<p><strong>Email:</strong> {{ user.email }}</p>
+<p><strong>Bio:</strong> {{ user.profile.bio }}</p>
+{% if user.profile.profile_picture %}
+    <img src="{{ user.profile.profile_picture.url }}" width="150">
+{% endif %}
+{% endblock %}

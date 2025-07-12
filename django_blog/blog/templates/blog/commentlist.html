@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>All Comments</h2>
+
+  {% if comment_list %}
+    <ul>
+      {% for comment in comment_list %}
+        <li>
+          <strong>{{ comment.author.username }}</strong> said:
+          <p>{{ comment.content }}</p>
+          <small>On post: <a href="{% url 'post-detail' comment.post.pk %}">{{ comment.post.title }}</a></small>
+
+          {% if user.is_authenticated and user == comment.author %}
+            | <a href="{% url 'comment-delete' comment.pk %}">Delete</a>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No comments yet.</p>
+  {% endif %}
+{% endblock %}
