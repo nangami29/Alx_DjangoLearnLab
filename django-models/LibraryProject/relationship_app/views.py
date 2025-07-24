@@ -8,12 +8,12 @@ def book_list(request):
     author_name='kev'
     try:
         author = Author.objects.get(name=author_name)
-        books = author.books.all()  
+        books = Book.books.all()  
     except Author.DoesNotExist:
         books = []
     context={'book_list':books,
              }
-    return render(request, 'books/book_list.html', context)
+    return render(request, 'relationship_app/book_list.html', context)
 
 #Implement Class-based View:
 class LibraryDetailView(DetailView):
