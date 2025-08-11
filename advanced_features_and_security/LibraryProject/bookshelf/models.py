@@ -4,7 +4,11 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager, Permission
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-
+from django.db.models.signals import post_migrate
+from django.dispatch import receiver
+from django.contrib.auth.models import Group, Permission
+from django.contrib.contenttypes.models import ContentType
+from .models import Book
 
 # Create your models here.
 class Book (models.Model):
@@ -61,11 +65,7 @@ editors_group = Group.objects.create(name='Editors')
 viewers_group= Group.objects.create(name='Viewers')
 admin_group = Group.objects.create(name='Admins')
 
-from django.db.models.signals import post_migrate
-from django.dispatch import receiver
-from django.contrib.auth.models import Group, Permission
-from django.contrib.contenttypes.models import ContentType
-from .models import Book
+
 
 @receiver(post_migrate)
 def create_groups_and_permissions(sender, **kwargs):
