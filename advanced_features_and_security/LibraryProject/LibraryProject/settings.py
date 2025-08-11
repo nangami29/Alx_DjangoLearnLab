@@ -140,7 +140,7 @@ SECURE_CONTENT_TYPE_NOSNIFF = True # X-Content-Type-Options: nosniff
 X_FRAME_OPTIONS = 'DENY'           # Prevent clickjacking
 
 # HTTP Strict Transport Security (HSTS)
-SECURE_HSTS_SECONDS = 60 * 60 * 24 * 30  # e.g., 30 days (increase once tested)
+SECURE_HSTS_SECONDS =SECURE_HSTS_SECONDS = 31536000
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
 
