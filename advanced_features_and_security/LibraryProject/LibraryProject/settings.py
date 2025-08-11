@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-#cu)h^pi4y%xq1e_#_9e%rs34cfam@cw1g+9j)_5*$ts7m==d5'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['yourdomain.com', '127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bookshelf',
-    'relationship_app'
+    'relationship_app',
+    'csp'
 ]
 
 MIDDLEWARE = [
@@ -49,6 +50,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+     'csp.middleware.CSPMiddleware',
+    
 ]
 
 ROOT_URLCONF = 'LibraryProject.urls'
@@ -124,3 +127,29 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'bookshelf.CustomUser'
+
+# HTTPS / cookies
+CSRF_COOKIE_SECURE = True          # CSRF cookie only sent over HTTPS
+SESSION_COOKIE_SECURE = True       # Session cookie only sent over HTTPS
+SECURE_SSL_REDIRECT = True         # Redirect all HTTP to HTTPS (enable if you have HTTPS)
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')  # if behind proxy/load balancer
+
+# Browser protections
+SECURE_BROWSER_XSS_FILTER = True   
+SECURE_CONTENT_TYPE_NOSNIFF = True # X-Content-Type-Options: nosniff
+X_FRAME_OPTIONS = 'DENY'           # Prevent clickjacking
+
+# HTTP Strict Transport Security (HSTS)
+SECURE_HSTS_SECONDS = 60 * 60 * 24 * 30  # e.g., 30 days (increase once tested)
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+
+# CSRF settings
+CSRF_COOKIE_HTTPONLY = False  
+
+# Other recommended (optional)
+SECURE_REFERRER_POLICY ='no-referrer-when-downgrade'
+CSP_DEFAULT_SRC = ("'self'",)
+CSP_SCRIPT_SRC = ("'self'",)  # add third-party domains if needed
+CSP_STYLE_SRC = ("'self'", "'unsafe-inline'")  # avoid 'unsafe-inline' if possible
+CSP_IMG_SRC = ("'self'", 'data:')
