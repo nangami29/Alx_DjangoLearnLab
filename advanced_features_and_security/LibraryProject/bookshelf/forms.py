@@ -1,14 +1,16 @@
-# bookshelf/forms.py
 from django import forms
 from .models import Book
 
-class BookForm(forms.ModelForm):
+class ExampleForm(forms.ModelForm):
+    """Form for creating or editing Book objects securely."""
+    
     class Meta:
         model = Book
         fields = ['title', 'author', 'publication_year']
-
-    def clean_publication_year(self):
-        year = self.cleaned_data.get('publication_year')
-        if year and (year < 0 or year > 9999):
-            raise forms.ValidationError("Enter a valid year.")
-        return year
+    
+    def clean_title(self):
+        """Extra validation for title to prevent malicious input."""
+        title = self.cleaned_data.get('title')
+        if "<script>" in title.lower():
+            raise forms.ValidationError("Invalid characters in title.")
+        return title
