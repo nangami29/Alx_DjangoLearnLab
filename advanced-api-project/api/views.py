@@ -1,18 +1,33 @@
 from django.shortcuts import render
-from rest_framework import generics, filters, permissions, serializers
+from rest_framework import generics, serializers
 from .models import Book
 from .serializers import BookSerializer
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from  django.contrib.auth.mixins import LoginRequiredMixin
 from datetime import datetime
+from django_filters import rest_framework as filters
+
 
 # Create your views here.
+# Create a FilterSet for Book model
+class BookFilter(filters.FilterSet):
+    title = filters.CharFilter(lookup_expr='icontains')
+    author = filters.CharFilter(lookup_expr='icontains')
+    publication_year = filters.NumberFilter()
+
+    class Meta:
+        model = Book
+        fields = ['title', 'author', 'publication_year']
 class BookListView(generics.ListAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
+    filter_backends= [filters.OrderingFilter]
     filter_backends= [filters.SearchFilter]
     search_fields = ['title', 'publication_year', 'author']
     permission_classes = [IsAuthenticatedOrReadOnly]
+    ordering_fields = ['title', 'author']
+    ordering = ['title']
+
 
 # CreateView: Add a new book
 class BookCreateView(LoginRequiredMixin, generics.CreateAPIView):
@@ -34,6 +49,7 @@ class BookCreateView(LoginRequiredMixin, generics.CreateAPIView):
 class BookDetailView(generics.RetrieveAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
+    filter_backends= [filters.OrderingFilter]
     filter_backends= [filters.SearchFilter]
     search_fields = ['title', 'publication_year', 'author']
     permission_classes = [IsAuthenticatedOrReadOnly]
