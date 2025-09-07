@@ -26,3 +26,16 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
     ],
 }
+# Testing the API
+We use Django’s built-in test framework with DRF’s APIClient.
+
+## Running Tests
+Run:
+    python manage.py test api
+
+## What is Tested
+- CRUD operations (Create, Retrieve, Update, Delete)
+- Permissions (only authenticated users can create/update/delete)
+- Filtering (by title, author, publication_year)
+- Ordering (by title, publication_year)
+- Response status codes and data integrity
