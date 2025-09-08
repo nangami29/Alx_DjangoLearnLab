@@ -1,4 +1,4 @@
-from rest_framework.views import APIView
+from rest_framework.views import generics, APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.authtoken.models import Token
@@ -10,7 +10,7 @@ from rest_framework import status, permissions
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 
-class RegisterView(APIView):
+class RegisterView(generics.GenericAPIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
@@ -25,7 +25,7 @@ class RegisterView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class LoginView(APIView):
+class LoginView(generics.GenericAPIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
@@ -41,9 +41,9 @@ class LoginView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @login_required
-class follow_user(APIView):
+class follow_user(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
-
+    queryset = CustomUser.objects.all()
     def post (self, request, user_id):
         target_user = get_object_or_404(CustomUser, id=user_id)
 
@@ -55,9 +55,9 @@ class follow_user(APIView):
 
 
 
-class Unfollow_User(APIView):
+class Unfollow_User(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
-
+    queryset = CustomUser.objects.all()
     def post(self, request, user_id):
         target_user = get_object_or_404(CustomUser, id=user_id)
 
