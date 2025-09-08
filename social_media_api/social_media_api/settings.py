@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-e9cl8p(qvv8nwis=p@x4(@s-4deeoarei4mf*tm0a4k%iy3%%p'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
      'rest_framework_simplejwt',
      'posts',
+     'notifications',
 ]
 
 MIDDLEWARE = [
@@ -80,10 +81,14 @@ WSGI_APPLICATION = 'social_media_api.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+        'ENGINE': 'django.db.backends.postgresql',
+       'NAME': 'tourismdb',
+        'USER': 'postgres',
+        'PASSWORD': '39568nanga',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }}
+
 
 
 # Password validation
@@ -145,3 +150,19 @@ REST_FRAMEWORK = {
         'rest_framework.filters.OrderingFilter',
     ],
 }
+
+# Security headers
+SECURE_BROWSER_XSS_FILTER = True
+X_FRAME_OPTIONS = 'DENY'
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# Enforce HTTPS
+SECURE_SSL_REDIRECT = True        
+SESSION_COOKIE_SECURE = True    
+CSRF_COOKIE_SECURE = True       
+
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'

@@ -9,7 +9,7 @@ urlpatterns = [
     path('login/', LoginView.as_view(), name='account-login'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
      path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('/follow/<int:user_id>/',  follow_user.as_view(), name='follow'),
-    path('/unfollow/<int:user_id>/', Unfollow_User.as_view(), name='unfollow')
+    path('follow/<int:user_id>/', follow_user, name='follow'),
+    path('unfollow/<int:user_id>/', Unfollow_User.as_view(), name='unfollow')
     
 ]

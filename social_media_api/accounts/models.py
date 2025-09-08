@@ -4,6 +4,7 @@ from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
+from django.conf import settings
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_auth_token(sender, instance=None, created=False, **kwargs):
@@ -16,7 +17,7 @@ class CustomUser(AbstractUser):
     profile_picture =models.ImageField()
     followers = models.ManyToManyField('self', symmetrical=False)
     following = models.ManyToManyField('self', symmetrical=False,
-                                      related_name='followers', blank=True)
+                                      related_name='user_followers', blank=True)
 
     def __str__(self):
         return self.user.username

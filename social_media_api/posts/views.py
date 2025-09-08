@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework import generics, viewsets, filters, status, permissions
 from .models import Post, Comment, Like
 from .serializers import PostSerializer, CommentSerializer
-from rest_framework.permissions import IsOwnerOrReadOnly, IsAuthenticatedOrReadOnly, IsAuthenticated
+from rest_framework.permissions import  IsAuthenticatedOrReadOnly, IsAuthenticated
 from datetime import datetime
 from django_filters.rest_framework import DjangoFilterBackend
 from django.shortcuts import get_object_or_404
@@ -67,7 +67,7 @@ class CommentListView(generics.ListAPIView):
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['author__username']
     search_fields = ['title', 'content']
@@ -108,7 +108,7 @@ class CommentDeleteView(generics.DestroyAPIView):
 
 class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['content', 'author__username']
     ordering_fields = ['created_at', 'author__username']
@@ -158,3 +158,12 @@ class UnlikePostView(generics.GenericAPIView):
             like.delete()
             return Response({"message": "Post unliked successfully"}, status=status.HTTP_200_OK)
         return Response({"message": "You haven't liked this post"}, status=status.HTTP_400_BAD_REQUEST)
+
+class FeedView(generics.ListAPIView):
+    serializer_class = PostSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        following_users = user.following.all() 
+        return Post.objects.filter(author__in=following_users).order_by('-created_at')
