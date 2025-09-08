@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import FeedView
+from .views import FeedView, LikePostView, UnlikePostView
 urlpatterns = [
   
    
@@ -19,4 +19,6 @@ urlpatterns = [
     path('comments/<int:pk>/delete/', views.CommentDeleteView.as_view(), name='comment-delete'),
 
      path('feed/', FeedView.as_view(), name='feed'),
+      path('<int:pk>/like/', LikePostView.as_view(), name='like_post'),
+    path('<int:pk>/unlike/', UnlikePostView.as_view(), name='unlike_post'),
 ]

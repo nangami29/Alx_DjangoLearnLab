@@ -1,9 +1,6 @@
 from django.db import models
 from django.conf import settings
-from .models import CustomUser
-from .serializers import PostSerializer
-from rest_framework import generics, permissions
-
+from django.contrib.auth.models import User
 
 class Post(models.Model):
     author = models.ForeignKey(
@@ -37,10 +34,16 @@ class Comment(models.Model):
     def __str__(self):
         return f'Comment by {self.author} on {self.post}'
 
-class FeedView(generics.ListAPIView):
-    serializer_class = PostSerializer
-    permission_classes = [permissions.IsAuthenticated]  
-    def get_queryset(self):
-        user = self.request.user
-        following_users = user.following.all() 
-        return Post.objects.filter(author__in=following_users).order_by('-created_at')  
+
+    
+class Like(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='likes')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='likes')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('posts', 'user')
+
+    
+    def __str__(self):
+        return f"{self.user} liked {self.post}"
